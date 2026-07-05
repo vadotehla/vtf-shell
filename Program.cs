@@ -127,14 +127,7 @@ while (cont)
                     string inp = Console.ReadLine() ?? "guest";
 
                     usn = inp;
-                    if (Users.ContainsKey(usn ?? "guest"))
-                    {
-                        workspace = "home";
-                    }
-                    else
-                    {
-                        workspace = null;
-                    }
+                    workspace = Users.ContainsKey(usn ?? "guest") ? "home" : null;
                     break;
                 }
             case "open":
@@ -145,8 +138,7 @@ while (cont)
                 {
                     if (Users.ContainsKey(usn ?? "guest"))
                     {
-                        if (Parsed.Length > 1) workspace = Parsed.ElementAt(1).Trim().ToLower().Equals("no-workspace") ? "home" : Parsed.ElementAt(1);
-                        else workspace = "home";
+                        workspace = Parsed.Length > 1 ? Parsed.ElementAt(1).Trim().ToLower().Equals("no-workspace") ? "home" : Parsed.ElementAt(1) : "home";
                     }
                     else workspace = null;
                 }
