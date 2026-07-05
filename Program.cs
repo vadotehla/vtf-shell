@@ -1,13 +1,16 @@
 ﻿using System.Collections.Frozen;
+using System.Security.Authentication;
 using System.Text.Json;
 // Global Variables
+
+Console.Title = "VTF International, Secure Interface";
 
 string input = "";
 string? usn = null;
 string? workspace = null;
 bool cont = true;
 List<string> Builtins = new(["exit", "type"]);
-List<string> ServerContacts = new(["whoami"]);
+List<string> ServerContacts = new(["whoami", "login", "open", "list", "move"]);
 FrozenDictionary<string, int> Users = JsonSerializer.Deserialize<Dictionary<string, int>>("""
     {
         "u1t": 10,
@@ -42,6 +45,7 @@ static string Paint(string text, int? fg = null, int? bg = null, bool bold = fal
     - list (lists files in the working directory)
     - whoami (prints current user and information about them)
     - login (changes changes current user)
+    - move (changes to a different working directory)
 */
 while (cont)
 {
@@ -104,6 +108,19 @@ while (cont)
                     }
                     break;
                 }
+            case "login":
+                {
+                    Console.Write($"|{Paint("admin.bot", fg: 31, bold: true)}|>> enter username: ");
+                    string inp = Console.ReadLine() ?? "guest";
+
+                    usn = inp;
+                    break;
+                }
+            case "open":
+            case "list":
+            case "move":
+                Console.WriteLine($"|{Paint("admin.bot", fg: 31, bold: true)}|>> unimplemented");
+                break;
             default:
                 Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                 break;
