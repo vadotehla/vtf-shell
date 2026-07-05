@@ -131,13 +131,14 @@ while (cont)
                 break;
             case "move":
                 {
-                    if (Users.ContainsKey(usn))
+                    if (Users.ContainsKey(usn ?? "guest"))
                     {
                         if (Parsed.Length > 1) workspace = Parsed.ElementAt(1);
                         else workspace = "home";
                     }
                     else workspace = "no-workspace";
                 }
+                break;
             default:
                 Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                 break;
