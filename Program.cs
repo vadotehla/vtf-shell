@@ -1,12 +1,16 @@
 ﻿using System.Collections.Frozen;
 using System.Security.Authentication;
 using System.Text.Json;
+
+{
+    Console.Title = "VTF International, Secure Interface";
+    Console.Clear();
+}
+
 // Global Variables
 
-Console.Title = "VTF International, Secure Interface";
-
 string input = "";
-string? usn = null;
+string? usn = Environment.UserName;
 string? workspace = null;
 bool cont = true;
 List<string> Builtins = new(["exit", "type"]);
@@ -36,6 +40,11 @@ static string Paint(string text, int? fg = null, int? bg = null, bool bold = fal
         return text;
 
     return $"\x1b[{string.Join(";", codes)}m{text}\x1b[0m";
+}
+
+{
+    if (usn is not null && Users.ContainsKey(usn))
+        workspace = "home";
 }
 
 /* Commands to be implemented:
@@ -78,12 +87,12 @@ while (cont)
                         }
                         else
                         {
-                            Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(arg, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
+                            Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(arg, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                         }
                     }
                     else
                     {
-                        Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)}type expected 1 argument (command)");
+                        Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)}type expected 1 argument (command)");
                     }
                     break;
                 }
@@ -118,11 +127,19 @@ while (cont)
                 }
             case "open":
             case "list":
-            case "move":
                 Console.WriteLine($"|{Paint("admin.bot", fg: 31, bold: true)}|>> unimplemented");
                 break;
+            case "move":
+                {
+                    if (Users.ContainsKey(usn))
+                    {
+                        if (Parsed.Length > 1) workspace = Parsed.ElementAt(1);
+                        else workspace = "home";
+                    }
+                    else workspace = "no-workspace";
+                }
             default:
-                Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
+                Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                 break;
         }
     }
