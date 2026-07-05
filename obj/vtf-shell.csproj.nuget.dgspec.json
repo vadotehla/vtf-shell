@@ -338,6 +338,11 @@
             "System.Xml.XPath.XDocument": "(,5.0.32767]"
           }
         }
+      },
+      "runtimes": {
+        "osx-arm64": {
+          "#import": []
+        }
       }
     }
   }
