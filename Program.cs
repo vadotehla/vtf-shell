@@ -24,7 +24,7 @@ FrozenDictionary<string, int> Users = JsonSerializer.Deserialize<Dictionary<stri
 
 static string[] ParseInput(string inp)
 {
-    return inp.Split(" ");
+    return inp.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 }
 
 static string Paint(string text, int? fg = null, int? bg = null, bool bold = false, bool underline = false)
@@ -96,7 +96,7 @@ while (cont)
                     }
                     else
                     {
-                        Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)}type expected 1 argument (command)");
+                        Console.Error.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} expected 1 argument (command)");
                     }
                     break;
                 }
@@ -133,7 +133,7 @@ while (cont)
                     }
                     else
                     {
-                        workspace = "no-workspace";
+                        workspace = null;
                     }
                     break;
                 }
@@ -145,10 +145,10 @@ while (cont)
                 {
                     if (Users.ContainsKey(usn ?? "guest"))
                     {
-                        if (Parsed.Length > 1) workspace = Parsed.ElementAt(1);
+                        if (Parsed.Length > 1) workspace = Parsed.ElementAt(1).Trim().ToLower().Equals("no-workspace") ? "home" : Parsed.ElementAt(1);
                         else workspace = "home";
                     }
-                    else workspace = "no-workspace";
+                    else workspace = null;
                 }
                 break;
             default:
