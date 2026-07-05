@@ -13,7 +13,7 @@ string input = "";
 string? usn = Environment.UserName;
 string? workspace = null;
 bool cont = true;
-List<string> Builtins = new(["exit", "type"]);
+List<string> Builtins = new(["exit", "type", "clear"]);
 List<string> ServerContacts = new(["whoami", "login", "open", "list", "move"]);
 FrozenDictionary<string, int> Users = JsonSerializer.Deserialize<Dictionary<string, int>>("""
     {
@@ -50,6 +50,7 @@ static string Paint(string text, int? fg = null, int? bg = null, bool bold = fal
 /* Commands to be implemented:
     - exit | quit (exits)
     - type (checks location)
+    - clear (clears screen)
     - open (prints a file's content)
     - list (lists files in the working directory)
     - whoami (prints current user and information about them)
@@ -71,6 +72,9 @@ while (cont)
             case "quit":
             case "exit":
                 cont = false;
+                break;
+            case "clear":
+                Console.Clear();
                 break;
             case "type":
                 {
@@ -123,6 +127,14 @@ while (cont)
                     string inp = Console.ReadLine() ?? "guest";
 
                     usn = inp;
+                    if (Users.ContainsKey(usn ?? "guest"))
+                    {
+                        workspace = "home";
+                    }
+                    else
+                    {
+                        workspace = "no-workspace";
+                    }
                     break;
                 }
             case "open":
