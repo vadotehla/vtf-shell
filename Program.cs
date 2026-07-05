@@ -7,6 +7,7 @@ string? usn = null;
 string? workspace = null;
 bool cont = true;
 List<string> Builtins = new(["exit", "type"]);
+List<string> ServerContacts = new(["whoami"]);
 FrozenDictionary<string, int> Users = JsonSerializer.Deserialize<Dictionary<string, int>>("""
     {
         "u1t": 10,
@@ -66,19 +67,21 @@ while (cont)
                         if (Builtins.Contains(arg))
                         {
                             Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> {Paint(arg, bg: 41, fg: 37)} is builtin");
-                            break;
+                        }
+                        else if (ServerContacts.Contains(arg))
+                        {
+                            Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> {Paint(arg, bg: 41, fg: 37)} is contact");
                         }
                         else
                         {
                             Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(arg, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
-                            break;
                         }
                     }
                     else
                     {
                         Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)}type expected 1 argument (command)");
-                        break;
                     }
+                    break;
                 }
             case "whoami":
                 {
@@ -86,7 +89,7 @@ while (cont)
                     if (usn is not null && Users.ContainsKey(usn))
                     {
                         int clearance = Users.GetValueOrDefault(usn, 0);
-                        Console.WriteLine($"You are logged in as {Paint(usn, fg: 36)}, with a clearance of {Paint(clearance, fg: 34)}.");
+                        Console.WriteLine($"You are logged in as {Paint(usn, fg: 36)}, with a clearance of {Paint(clearance.ToString(), fg: 34)}.");
                     }
                     else
                     {
