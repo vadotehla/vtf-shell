@@ -44,10 +44,10 @@ static string Paint(string text, int? fg = null, int? bg = null, bool bold = fal
 */
 while (cont)
 {
-    Console.Write($"|{Paint(usn ?? "guest", fg = 36)}|>> ({Paint(workspace ?? "no-workspace", fg = 31)}) ");
+    Console.Write($"|{Paint(usn ?? "guest", fg: 36)}|>> ({Paint(workspace ?? "no-workspace", fg: 31)}) ");
 
-    input = Console.ReadLine();
-    string[] Parsed = ParseInput(input.ToLower());
+    input = Console.ReadLine() ?? "";
+    string[] Parsed = ParseInput(input.ToLower() ?? "");
 
     if (Parsed.Length > 0)
     {
@@ -65,37 +65,44 @@ while (cont)
                         string arg = Parsed.ElementAt(1);
                         if (Builtins.Contains(arg))
                         {
-                            Console.WriteLine($"{arg} is builtin");
+                            Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> {Paint(arg, bg: 41, fg: 37)} is builtin");
                             break;
                         }
                         else
                         {
-                            Console.WriteLine($"{arg} unknown");
+                            Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(arg, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                             break;
                         }
                     }
                     else
                     {
-                        Console.WriteLine("type expected 1 argument (command)");
+                        Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)}type expected 1 argument (command)");
                         break;
                     }
                 }
             case "whoami":
                 {
-                    Console.Write("|admin.bot|>> ");
+                    Console.Write($"|{Paint("admin.bot", fg: 31, bold: true)}|>> ");
                     if (usn is not null && Users.ContainsKey(usn))
                     {
                         int clearance = Users.GetValueOrDefault(usn, 0);
-                        Console.WriteLine($"You are logged in as {usn}, with a clearance of {clearance}.");
+                        Console.WriteLine($"You are logged in as {Paint(usn, fg: 36)}, with a clearance of {Paint(clearance, fg: 34)}.");
                     }
                     else
                     {
-                        Console.WriteLine("You are not logged in or you are not a valid user.");
+                        if (usn is null)
+                        {
+                            Console.WriteLine("You are not logged in.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("You are not a valid user.");
+                        }
                     }
                     break;
                 }
             default:
-                Console.WriteLine($"{command} unknown");
+                Console.WriteLine($"|{Paint("server", fg: 30, bg: 47)}|>> ERROR: {Paint(command, bg: 41, fg: 37)} is {Paint("unknown", fg: 31)}");
                 break;
         }
     }
